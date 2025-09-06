@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 350px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+    input, button, select {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .result {
+      margin-top: 15px;
+      padding: 10px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📊 Attendance Calculator</h2>
+    <input type="number" id="total" placeholder="Total Classes" min="1">
+    <input type="number" id="attended" placeholder="Attended Classes" min="0">
+    <input type="number" id="target" placeholder="Target % (e.g., 80)" min="1" max="100">
+    <button onclick="calculateAttendance()">Calculate</button>
+    <div class="result" id="output"></div>
+  </div>  <script>
+    function calculateAttendance() {
+      let total = parseInt(document.getElementById('total').value);
+      let attended = parseInt(document.getElementById('attended').value);
+      let target = parseInt(document.getElementById('target').value);
+      let output = document.getElementById('output');
+
+      if(isNaN(total) || isNaN(attended) || isNaN(target) || total <= 0 || attended < 0){
+        output.innerHTML = "⚠️ Please enter valid numbers.";
+        return;
+      }
+
+      let currentPercentage = (attended / total) * 100;
+      let msg = `<b>Current Attendance:</b> ${currentPercentage.toFixed(2)}%<br>`;
+
+      if(currentPercentage < target){
+        let needed = Math.ceil(((target/100)*total - attended) / (1 - target/100));
+        msg += `✅ You need to attend <b>${needed}</b> more classes in a row to reach ${target}%.`;
+      } else {
+        let canBunk = Math.floor((attended / (target/100)) - total);
+        msg += `😎 You can bunk <b>${canBunk}</b> more classes and still stay at ${target}%.`;
+      }
+
+      output.innerHTML = msg;
+    }
+  </script></body>
+</html>
